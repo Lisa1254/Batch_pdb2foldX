@@ -71,9 +71,11 @@ for i in `seq 1 $maxres` ; do
  rm binding_energies_${i}_${OGpdb}.txt
  rm energies_${i}_${OGpdb}.txt
  echo Done with ${param} input >> log_foldX_batch.txt
+# Keeping ${outdir}/out_rem1.txt for now to allow preview of most recent output
 done
 
-#Remove temp2_out.txt
+#Remove extra files
+rm ${outdir}/out_rem1.txt
 rm temp2_out.txt
 
 Currentdate=`date`
