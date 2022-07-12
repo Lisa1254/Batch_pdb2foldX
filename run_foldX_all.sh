@@ -8,7 +8,12 @@ aa3=('GLY' 'ALA' 'LEU' 'VAL' 'ILE' 'PRO' 'ARG' 'THR' 'SER' 'CYS' 'MET' 'LYS' 'GL
 OGpdb="GNB1L_bfact_avg_functional"
 outdir="foldX_outputs"
 chain="B"
+outfile="GNB1L_foldX_output"
+foldX_loc="/Users/lhoeg/Documents/foldX/foldx5MacStd/foldx_20221231"
 
+#Initialize log file for current iteration
+Currentdate=`date`
+echo Starting analysis at ${Currentdate}
 #Parse pdb file for inputs
 echo Parsing pdb file ${OGpdb}.pdb for residues and positions on chain ${chain} >> log_foldX_batch.txt
 #Extract only residue and position for specified chain
@@ -23,7 +28,7 @@ maxres=`tail -n 1 temp2_out.txt | awk '{print $2}'`
 
 #Iterate through each residue
 echo Starting first residue for foldX search >> log_foldX_batch.txt
-for i in `seq 201 $maxres` ; do
+for i in `seq 1 $maxres` ; do
  res3=`head -n $i temp2_out.txt | tail -n 1 | awk '{print $1}'`
 
 # Translate given 3 letter amino acid code to single letter
@@ -37,15 +42,20 @@ for i in `seq 201 $maxres` ; do
 # Write to log file what comparison is being started
  echo Starting foldX of ${res3} at position ${i} using parameter ${param} >> log_foldX_batch.txt
 # Call foldX program with indicated parameters
- /Users/lhoeg/Documents/foldX/foldx5MacStd/foldx_20221231 \
-  --command=PositionScan --pdb=${OGpdb}.pdb \
-  --positions=${param} --out-pdb=FALSE --output-dir=${outdir} \
-  --output-file=Temp --screen=false
+ ${foldX_loc} \
+  --command=PositionScan \
+  --pdb=${OGpdb}.pdb \
+  --positions=${param} \
+  --out-pdb=FALSE \
+  --output-dir=${outdir} \
+  --output-file=Temp \
+  --screen=false
 # Remove self comparison from output & Concatenate output to a mainfile
+# Note: histidine may retain the self comparison depending on how the software utilizes H1S and H2S
  echo Adding output scores from ${param} input to main file >> log_foldX_batch.txt
  rem_line=`head -n 1 ${outdir}/PS_Temp_scanning_output.txt`
  grep -v "${rem_line}" ${outdir}/PS_Temp_scanning_output.txt > ${outdir}/out_rem1.txt
- grep -v "${res3}${chain}${i}${res1}" ${outdir}/out_rem1.txt >> ${outdir}/GNB1L_foldX_output.txt
+ grep -v "${res3}${chain}${i}${res1}" ${outdir}/out_rem1.txt >> ${outdir}/${outfile}.txt
 # Clean up extra pdb files
  echo Cleaning up intermittent files from ${param} input >> log_foldX_batch.txt
  for p in "${!aa3[@]}"; do
@@ -66,9 +76,7 @@ done
 #Remove temp2_out.txt
 rm temp2_out.txt
 
-echo DONE >> log_foldX_batch.txt
+Currentdate=`date`
+echo DONE at ${Currentdate} >> log_foldX_batch.txt
 
-#Leaving this in til I am sure condensing to a single line works
-#tof="${outdir}/PS_Temp_scanning_output.txt"
-#line1=`head -n 1 ${tof}`
 
