@@ -8,12 +8,13 @@ aa3=('GLY' 'ALA' 'LEU' 'VAL' 'ILE' 'PRO' 'ARG' 'THR' 'SER' 'CYS' 'MET' 'LYS' 'GL
 OGpdb="GNB1L_bfact_avg_functional"
 outdir="foldX_outputs"
 chain="B"
+#NOTE: hard coding chain at line 21, since I'm having trouble getting the awk command to recognize the equality
 outfile="GNB1L_foldX_output"
 foldX_loc="/Users/lhoeg/Documents/foldX/foldx5MacStd/foldx_20221231"
 
 #Initialize log file for current iteration
 Currentdate=`date`
-echo Starting analysis at ${Currentdate}
+echo Starting analysis at ${Currentdate} >> log_foldX_batch.txt
 #Parse pdb file for inputs
 echo Parsing pdb file ${OGpdb}.pdb for residues and positions on chain ${chain} >> log_foldX_batch.txt
 #Extract only residue and position for specified chain
@@ -27,7 +28,7 @@ rm temp_out.txt
 maxres=`tail -n 1 temp2_out.txt | awk '{print $2}'`
 
 #Iterate through each residue
-echo Starting first residue for foldX search >> log_foldX_batch.txt
+echo Starting first residue for foldX Position Scan >> log_foldX_batch.txt
 for i in `seq 1 $maxres` ; do
  res3=`head -n $i temp2_out.txt | tail -n 1 | awk '{print $1}'`
 
@@ -71,7 +72,7 @@ for i in `seq 1 $maxres` ; do
  rm binding_energies_${i}_${OGpdb}.txt
  rm energies_${i}_${OGpdb}.txt
  echo Done with ${param} input >> log_foldX_batch.txt
-# Keeping ${outdir}/out_rem1.txt for now to allow preview of most recent output
+# Keeping ${outdir}/out_rem1.txt for now to allow preview of most recent output. Will overwrite each iteration, and delete upon completion of script
 done
 
 #Remove extra files
