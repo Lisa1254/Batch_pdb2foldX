@@ -10,7 +10,7 @@ This repository contains two shell scripts to parse a Protein Data Base file for
 - Identify location of foldX program at "foldX_loc" input.  
 - Define name of original PDB file without the .pdb extension as the "OGpdb" variable  
 - Define the name of the output directory as "outdir" for the main output file. The directory must already exist.  
-- Identify the chain being considered. Still needs to be hard coded at line 21 (PS) and 27, 63 (BM) for awk/gsed commands.  
+- Identify the chain being considered. Still needs to be hard coded at line 21 (PS) and 27, 72 (BM) for awk/gsed commands.  
 - Give the main output file that collects all scores a name as "outfile". If a file already exists with the same name, new results will be added to the end of the file. This allows the program to stop and start again if needed.  
 - The BM version will also use "outfname" to define the text file of mutations to be performed.  
   
