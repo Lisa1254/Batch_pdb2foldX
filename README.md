@@ -27,7 +27,8 @@ This repository contains two shell scripts to parse a Protein Data Base file for
 - Only 20 standard amino acid are described for mapping to single letter code. The foldX documentation lists additional recognized amino acids based on certain common modifications that you can add to the aa3 and aa1 variables at the top of the script.  
 - Progress will be reported to a file called "log_foldX_batch.txt". If it does not already exist in current working directory, it will be created. If it does exist, new lines will be appended to the end of the document.  
 - Currently getting unexpected results with mutating to or from histidine with Position Scan. The software may substitute "H1S" or "H2S" as "o" or "e" representing charged "ND1" and "NE2" for mutagenesis from the standard "HIS"/"H", based on pH and protonation from the pdb file, but sometimes this produces unexpected results.  
-- If the program is interrupted, just check the log or output file for the last added input, then change the starting sequence number to the next required residue at line 31 of the program.  
+- If the program is interrupted, just check the log or output file for the last added input, then change the starting sequence number to the next required residue at line 32 of the program for PS version.  
+- For starting at a midpoint of the BM script, can add new variable of remaining residues to mutate. For example, if needing to only run S, T, V, W, Y, then can add aa1rem=('S', 'T', 'V', 'W', 'Y'), and replace ${aa1} with ${aa1rem} everywhere it appears in lines 58-90.  
 - Each position takes 30s-3min to run depending on your system. The protein I wrote this for had 327 residues on the B chain, so it took over ten hours to run.  
   
   
